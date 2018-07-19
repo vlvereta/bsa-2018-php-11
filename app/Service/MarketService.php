@@ -4,10 +4,12 @@ namespace App\Service;
 
 use App\Entity\Lot;
 use App\Entity\Trade;
+use App\Mail\TradeCreated;
 use App\Response\Contracts\LotResponse;
 use App\Request\Contracts\AddLotRequest;
 use App\Request\Contracts\BuyLotRequest;
 use App\Repository\Contracts\LotRepository;
+use App\Repository\Contracts\UserRepository;
 use App\Repository\Contracts\TradeRepository;
 use App\Service\Contracts\MarketService as IMarketService;
 use App\Exceptions\MarketException\LotDoesNotExistException;
@@ -16,10 +18,12 @@ use App\Exceptions\MarketException\LotDoesNotExistException;
 class MarketService implements IMarketService
 {
     private $lotRepository;
+    private $userRepository;
     private $tradeRepository;
 
     public function __construct(
         LotRepository $lotRepository,
+        UserRepository $userRepository,
         TradeRepository $tradeRepository)
     {
         $this->lotRepository = $lotRepository;
@@ -47,13 +51,16 @@ class MarketService implements IMarketService
         /*
          * Добавить проверки и выброс исключений соглассно заданию.
          */
-        return $this->tradeRepository->add(
+        $lot = $this->lotRepository->getById($lotRequest->getLotId());
+        $trade = $this->tradeRepository->add(
             new Trade([
                 'amount'    => $lotRequest->getAmount(),
                 'lot_id'    => $lotRequest->getLotId(),
                 'user_id'   => $lotRequest->getUserId(),
             ])
         );
+        Mail::to($this->userRepository->getById($lot->getAttribute('seller_id')))->send(new TradeCreated($trade));
+        return $trade;
     }
 
     public function getLot(int $id): LotResponse
