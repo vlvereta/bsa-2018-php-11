@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App;
+use Mail;
 use App\Entity\Lot;
 use App\Entity\Trade;
 use App\Mail\TradeCreated;
@@ -27,6 +29,7 @@ class MarketService implements IMarketService
         TradeRepository $tradeRepository)
     {
         $this->lotRepository = $lotRepository;
+        $this->userRepository = $userRepository;
         $this->tradeRepository = $tradeRepository;
     }
 
@@ -69,7 +72,7 @@ class MarketService implements IMarketService
         if (!$lot) {
             throw new LotDoesNotExistException('Lot doesn\'t exists!');
         }
-        return App::make(LotResponse::class, $lot);
+        return new App\Response\LotResponse($lot);
     }
 
     public function getLotList(): array
@@ -77,7 +80,7 @@ class MarketService implements IMarketService
         $result = [];
         $lotList = $this->lotRepository->findAll();
         foreach ($lotList as $lot) {
-            $result[] = App::make(LotResponse::class, $lot);
+            $result[] = new App\Response\LotResponse($lot);
         }
         return $result;
     }
