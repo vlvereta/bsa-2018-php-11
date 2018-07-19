@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Lot;
+use App\Entity\Trade;
 use App\Repository\Contracts\LotRepository as ILotRepository;
 
 class LotRepository implements ILotRepository
@@ -29,10 +30,14 @@ class LotRepository implements ILotRepository
     }
 
     /*
-     * Что конкретно имеется ввиду? Юзер может открыть только один лот?..
+     * Если я правильно понял, то нужно вернуть лот, который покупает переданный по id юзер?!..
      */
     public function findActiveLot(int $userId): ?Lot
     {
-        // TODO: Implement findActiveLot() method.
+        $trade = Trade::where('user_id', $userId)->first();
+        if ($trade) {
+            return Lot::find($trade->getAttribute('lot_id'));
+        }
+        return null;
     }
 }
