@@ -95,12 +95,5 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(IWalletRepository::class)
             );
         });
-
-        /*
-         * LotResponse binding!
-         */
-        $this->app->bind(ILotResponse::class, function ($app, $lot) {
-           return new LotResponse($lot);
-        });
     }
 }
