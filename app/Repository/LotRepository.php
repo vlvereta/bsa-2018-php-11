@@ -29,15 +29,11 @@ class LotRepository implements ILotRepository
         return Lot::all()->toArray();
     }
 
-    /*
-     * Если я правильно понял, то нужно вернуть лот, который покупает переданный по id юзер?!..
-     */
     public function findActiveLot(int $userId): ?Lot
     {
-        $trade = Trade::where('user_id', $userId)->first();
-        if ($trade) {
-            return Lot::find($trade->getAttribute('lot_id'));
-        }
-        return null;
+        $currentTimeStamp = time();
+        return Lot::where('seller_id', $userId)
+            ->where('date_time_open', '<', $currentTimeStamp)
+            ->where('date_time_close', '>', $currentTimeStamp);
     }
 }
