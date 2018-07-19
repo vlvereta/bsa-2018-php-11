@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lot extends Model
 {
     protected $fillable = [
-        "id",
+        'id',
         'currency_id',
         'seller_id',
         'date_time_open',

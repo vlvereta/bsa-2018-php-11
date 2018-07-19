@@ -9,9 +9,9 @@ class CurrencyRepository implements ICurrencyRepository
 {
     public function add(Currency $currency): Currency
     {
-        return Currency::create(
-            ['name' => $currency->getAttribute('name')]
-        );
+        return Currency::create([
+            'name' => $currency->getAttribute('name')
+        ]);
     }
 
     public function getById(int $id): ?Currency
