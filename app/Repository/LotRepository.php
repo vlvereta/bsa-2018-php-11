@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Lot;
-use App\Entity\Trade;
 use App\Repository\Contracts\LotRepository as ILotRepository;
 
 class LotRepository implements ILotRepository
@@ -14,8 +13,8 @@ class LotRepository implements ILotRepository
             'price'             => $lot->getAttribute('price'),
             'seller_id'         => $lot->getAttribute('seller_id'),
             'currency_id'       => $lot->getAttribute('currency_id'),
-            'date_time_open'    => $lot->getAttribute('date_time_open'),
-            'date_time_close'   => $lot->getAttribute('date_time_close')
+            'date_time_open'    => date("Y-m-d H:i:s", $lot->getAttribute('date_time_open')),
+            'date_time_close'   => date("Y-m-d H:i:s", $lot->getAttribute('date_time_close'))
         ]);
     }
 

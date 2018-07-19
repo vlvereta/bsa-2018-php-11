@@ -84,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IMarketService::class, function ($app) {
             return new MarketService(
                 $app->make(ILotRepository::class),
+                $app->make(IUserRepository::class),
                 $app->make(ITradeRepository::class)
             );
         });
