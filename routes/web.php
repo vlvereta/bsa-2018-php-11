@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/market/lots/add', function () {
+    return view('add-form', ['success' => null]);
+});
+
+Route::post('/market/lots/add', function () {
+    return view('add-form', ['success' => true, 'error' => null]);
+})->name('store');

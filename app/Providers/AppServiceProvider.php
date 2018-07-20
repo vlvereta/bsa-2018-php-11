@@ -23,9 +23,6 @@ use App\Service\Contracts\{
 };
 use App\Service\{MarketService, WalletService, CurrencyService};
 
-use App\Response\LotResponse;
-use App\Response\Contracts\LotResponse as ILotResponse;
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
