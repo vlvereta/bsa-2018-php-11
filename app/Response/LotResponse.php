@@ -18,14 +18,14 @@ class LotResponse implements ILotResponse
     private $dateTimeOpen;
     private $dateTimeClose;
 
-    public function __construct(Lot $lot)
+    public function __construct(Lot $lot, User $user, Currency $currency)
     {
+        $this->user = $user;
+        $this->currency = $currency;
         $this->lotId = $lot->getAttribute('id');
         $this->price = $lot->getAttribute('price');
         $this->dateTimeOpen = $lot->getAttribute('date_time_open');
         $this->dateTimeClose = $lot->getAttribute('date_time_close');
-        $this->user = User::find($lot->getAttribute('seller_id'));
-        $this->currency = Currency::find($lot->getAttribute('currency_id'));
     }
 
     public function getId(): int

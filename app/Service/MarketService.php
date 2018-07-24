@@ -13,6 +13,7 @@ use App\Request\Contracts\BuyLotRequest;
 use App\Repository\Contracts\LotRepository;
 use App\Repository\Contracts\UserRepository;
 use App\Repository\Contracts\TradeRepository;
+use App\Repository\Contracts\CurrencyRepository;
 use App\Service\Contracts\MarketService as IMarketService;
 use App\Exceptions\MarketException\LotDoesNotExistException;
 
@@ -22,15 +23,18 @@ class MarketService implements IMarketService
     private $lotRepository;
     private $userRepository;
     private $tradeRepository;
+    private $currencyRepository;
 
     public function __construct(
         LotRepository $lotRepository,
         UserRepository $userRepository,
-        TradeRepository $tradeRepository)
+        TradeRepository $tradeRepository,
+        CurrencyRepository $currencyRepository)
     {
         $this->lotRepository = $lotRepository;
         $this->userRepository = $userRepository;
         $this->tradeRepository = $tradeRepository;
+        $this->currencyRepository = $currencyRepository;
     }
 
     public function addLot(AddLotRequest $lotRequest): Lot
@@ -72,7 +76,9 @@ class MarketService implements IMarketService
         if (!$lot) {
             throw new LotDoesNotExistException('Lot doesn\'t exists!');
         }
-        return new App\Response\LotResponse($lot);
+        return new App\Response\LotResponse($lot,
+            $this->userRepository->getById($lot->getAttribute('seller_id')),
+            $this->currencyRepository->getById($lot->getAttribute('currency_id')));
     }
 
     public function getLotList(): array
@@ -80,7 +86,9 @@ class MarketService implements IMarketService
         $result = [];
         $lotList = $this->lotRepository->findAll();
         foreach ($lotList as $lot) {
-            $result[] = new App\Response\LotResponse($lot);
+            $result[] = new App\Response\LotResponse($lot,
+                $this->userRepository->getById($lot->getAttribute('seller_id')),
+                $this->currencyRepository->getById($lot->getAttribute('currency_id')));
         }
         return $result;
     }
