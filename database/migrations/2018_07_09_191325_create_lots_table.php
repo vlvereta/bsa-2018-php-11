@@ -17,8 +17,8 @@ class CreateLotsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('currency_id');
             $table->unsignedInteger('seller_id');
-            $table->timestamp('date_time_open')->default(\DB::raw('CURRENT_TIMESTAMP'));;
-            $table->timestamp('date_time_close')->default(\DB::raw('CURRENT_TIMESTAMP'));;
+            $table->timestamp('date_time_open')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('date_time_close')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->float('price', 8, 2);
             $table->timestamps();
 
