@@ -9,20 +9,8 @@ class MoneyRepository implements IMoneyRepository
 {
     public function save(Money $money): Money
     {
-        $amount = $money->getAttribute('amount');
-        $walletId = $money->getAttribute('wallet_id');
-        $currencyId = $money->getAttribute('currency_id');
-
-        if ($existed = $this->findByWalletAndCurrency($walletId, $currencyId)) {
-            $existed->setAttribute('amount', $amount);
-            $existed->save();
-            return $existed;
-        }
-        return Money::create([
-            'amount'        => $amount,
-            'wallet_id'     => $walletId,
-            'currency_id'   => $currencyId,
-        ]);
+        $money->save();
+        return $money;
     }
 
     public function findByWalletAndCurrency(int $walletId, int $currencyId): ?Money
