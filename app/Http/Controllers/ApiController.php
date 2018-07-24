@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Request\AddLotRequest;
 use App\Request\BuyLotRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Response\Contracts\LotResponse;
 use App\Service\Contracts\MarketService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Exceptions\MarketException\LotDoesNotExistException;
 
 class ApiController extends Controller
@@ -22,7 +22,7 @@ class ApiController extends Controller
     public function add(Request $request)
     {
         if (Auth::check()) {
-            $lot = $this->marketService->addLot(
+            $this->marketService->addLot(
                 new AddLotRequest(
                     $request->input('currency_id'),
                     Auth::id(),
@@ -31,7 +31,7 @@ class ApiController extends Controller
                     $request->input('price')
                 )
             );
-            return redirect()->route('show', ['id' => $lot->getAttribute('id')]);
+            return response()->json(['Response: ' => 'Lot added!'], 201, ['Content-type' => 'application/json']);
         }
         return $this->forbiddenAccess();
     }
@@ -39,10 +39,10 @@ class ApiController extends Controller
     public function buy(Request $request)
     {
         if (Auth::check()) {
-            $trade = $this->marketService->buyLot(
+            $this->marketService->buyLot(
                 new BuyLotRequest(Auth::id(), $request->input('lot_id'), $request->input('amount'))
             );
-            return redirect()->route('show', ['id' => $trade->getAttribute('lot_id')]);
+            return response()->json(['Response: ' => 'Trade created!'], 201, ['Content-type' => 'application/json']);
         }
         return $this->forbiddenAccess();
     }
@@ -70,6 +70,11 @@ class ApiController extends Controller
         return response()->json($this->lotResponseToArray($lotResponse), 200, ['Content-type' => 'application/json']);
     }
 
+    /**
+     * Shared functionality for response.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     private function forbiddenAccess() {
         return response()->json([
             'error' => [
@@ -79,6 +84,12 @@ class ApiController extends Controller
         ], 403, ['Content-Type' => 'application/json']);
     }
 
+    /**
+     * Converter used in methods above.
+     *
+     * @param LotResponse $response
+     * @return array
+     */
     private function lotResponseToArray(LotResponse $response): array
     {
         return [
