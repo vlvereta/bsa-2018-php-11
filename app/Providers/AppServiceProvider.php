@@ -82,7 +82,8 @@ class AppServiceProvider extends ServiceProvider
             return new MarketService(
                 $app->make(ILotRepository::class),
                 $app->make(IUserRepository::class),
-                $app->make(ITradeRepository::class)
+                $app->make(ITradeRepository::class),
+                $app->make(ICurrencyRepository::class)
             );
         });
 
