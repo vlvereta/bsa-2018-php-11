@@ -47,8 +47,8 @@ class MarketService implements IMarketService
                 'price'             => $lotRequest->getPrice(),
                 'seller_id'         => $lotRequest->getSellerId(),
                 'currency_id'       => $lotRequest->getCurrencyId(),
-                'date_time_open'    => $lotRequest->getDateTimeOpen(),
-                'date_time_close'   => $lotRequest->getDateTimeClose(),
+                'date_time_open'    => date('Y-m-d H:i:s', $lotRequest->getDateTimeOpen()),
+                'date_time_close'   => date('Y-m-d H:i:s', $lotRequest->getDateTimeClose()),
             ])
         );
     }
@@ -74,7 +74,7 @@ class MarketService implements IMarketService
     {
         $lot = $this->lotRepository->getById($id);
         if (!$lot) {
-            throw new LotDoesNotExistException('Lot doesn\'t exists!');
+            throw new LotDoesNotExistException('Lot doesn\'t exist!');
         }
         return new App\Response\LotResponse($lot,
             $this->userRepository->getById($lot->getAttribute('seller_id')),

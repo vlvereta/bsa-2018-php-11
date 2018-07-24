@@ -24,8 +24,8 @@ class LotResponse implements ILotResponse
         $this->currency = $currency;
         $this->lotId = $lot->getAttribute('id');
         $this->price = $lot->getAttribute('price');
-        $this->dateTimeOpen = $lot->getAttribute('date_time_open');
-        $this->dateTimeClose = $lot->getAttribute('date_time_close');
+        $this->dateTimeOpen = $lot->getDateTimeOpen();
+        $this->dateTimeClose = $lot->getDateTimeClose();
     }
 
     public function getId(): int
@@ -48,20 +48,20 @@ class LotResponse implements ILotResponse
      */
     public function getAmount(): float
     {
-        $wallet = Wallet::where('user_id', $this->user->getAttribute('id'));
+        $wallet = Wallet::where('user_id', $this->user->getAttribute('id'))->first();
         $money = Money::where('wallet_id', $wallet->getAttribute('id'))
-            ->where('currency_id', $this->currency->getAttribute('id'));
+            ->where('currency_id', $this->currency->getAttribute('id'))->first();
         return $money->getAttribute('amount');
     }
 
     public function getDateTimeOpen(): string
     {
-        return date("Y-m-d H:i:s", $this->dateTimeOpen);
+        return date('Y-m-d H:i:s', $this->dateTimeOpen);
     }
 
     public function getDateTimeClose(): string
     {
-        return date("Y-m-d H:i:s", $this->dateTimeClose);
+        return date('Y-m-d H:i:s', $this->dateTimeClose);
     }
 
     public function getPrice(): string

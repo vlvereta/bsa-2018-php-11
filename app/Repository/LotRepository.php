@@ -15,7 +15,7 @@ class LotRepository implements ILotRepository
 
     public function getById(int $id): ?Lot
     {
-        return Lot::find($id)->first();
+        return Lot::find($id);
     }
 
     public function findAll()
