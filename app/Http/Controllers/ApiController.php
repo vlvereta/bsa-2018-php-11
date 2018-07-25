@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Request\AddLotRequest;
 use App\Request\BuyLotRequest;
@@ -21,6 +22,17 @@ class ApiController extends Controller
 
     public function add(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'currency_id'       => 'required|integer|min:1',
+            'date_time_open'    => 'required|integer|min:1',
+            'date_time_close'   => 'required|integer|min:1',
+            'price'             => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->returnFail($validator->errors()->first());
+        }
+
         if (Auth::check()) {
             $this->marketService->addLot(
                 new AddLotRequest(
@@ -38,6 +50,15 @@ class ApiController extends Controller
 
     public function buy(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'lot_id'    => 'required|integer|min:1',
+            'amount'    => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->returnFail($validator->errors()->first());
+        }
+
         if (Auth::check()) {
             $this->marketService->buyLot(
                 new BuyLotRequest(Auth::id(), $request->input('lot_id'), $request->input('amount'))
@@ -60,14 +81,23 @@ class ApiController extends Controller
         try {
             $lotResponse = $this->marketService->getLot($id);
         } catch (LotDoesNotExistException $e) {
-            return response()->json([
-                'error' => [
-                    'message'       => $e->getMessage(),
-                    'status_code'   => 400
-                ]
-            ], 400, ['Content-Type' => 'application/json']);
+            return $this->returnFail($e->getMessage());
         }
         return response()->json($this->lotResponseToArray($lotResponse), 200, ['Content-type' => 'application/json']);
+    }
+
+    /**
+     * Shared functionality for response.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    private function returnFail(string $message) {
+        return response()->json([
+            'error' => [
+                'message'       => $message,
+                'status_code'   => 400
+            ]
+        ], 400, ['Content-Type' => 'application/json']);
     }
 
     /**
