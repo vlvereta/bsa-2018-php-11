@@ -9,25 +9,27 @@
     <form method="POST" action="{{ route('store') }}">
         {{ csrf_field() }}
 
-        @if ($success === true)
-            <h4>Lot has been added successfully!</h4>
-        @elseif ($success !== null && $success === false)
-            <h4>Sorry, error has been occurred {{ $error }}</h4>
+        @if (isset($error))
+            @if ($error === false)
+                <h4>Lot has been added successfully!</h4>
+            @else
+                <h4>Sorry, error has been occurred: {{ $message }}</h4>
+            @endif
         @endif
 
-        <label for="currencyId">currencyId</label><br>
-        <input id="currencyId" type="currencyId" name="currencyId" value="{{ old('currencyId') }}"><br>
+        <label for="currency_id">currencyId</label><br>
+        <input id="currency_id" type="currency_id" name="currency_id" value="{{ old('currency_id') }}"><br>
 
-        <label for="sellerId">sellerId</label><br>
-        <input id="sellerId" type="sellerId" name="sellerId" value="{{ old('sellerId') }}"><br>
+        <label for="seller_id">sellerId</label><br>
+        <input id="seller_id" type="seller_id" name="seller_id" value="{{ old('seller_id') }}"><br>
 
-        <label for="dateTimeOpen">dateTimeOpen</label><br>
-        <input id="dateTimeOpen" type="dateTimeOpen" name="dateTimeOpen" value="{{ old('dateTimeOpen') }}"><br>
+        <label for="date_time_open">dateTimeOpen</label><br>
+        <input id="date_time_open" type="date_time_open" name="date_time_open" value="{{ old('date_time_open') }}"><br>
 
-        <label for="dateTimeClose">dateTimeClose</label><br>
-        <input id="dateTimeClose" type="dateTimeClose" name="dateTimeClose" value="{{ old('dateTimeClose') }}"><br>
+        <label for="date_time_close">dateTimeClose</label><br>
+        <input id="date_time_close" type="date_time_close" name="date_time_close" value="{{ old('date_time_close') }}"><br>
 
-        <label for="price">sellerId</label><br>
+        <label for="price">price</label><br>
         <input id="price" type="price" name="price" value="{{ old('price') }}"><br>
 
         <button type="submit" class="btn btn-primary">Add</button>
