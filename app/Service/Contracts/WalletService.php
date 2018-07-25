@@ -27,7 +27,7 @@ interface WalletService
     /**
      * Take money from a wallet.
      *
-     * @param MoneyRequest $currencyRequest
+     * @param MoneyRequest $moneyRequest
      * @return Money
      */
     public function takeMoney(MoneyRequest $moneyRequest) : Money;

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Currency extends Model
 {
     protected $fillable = [
-        "id",
-        "name"
+        'id',
+        'name'
     ];
 }

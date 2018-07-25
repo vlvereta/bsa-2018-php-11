@@ -16,3 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('v1')->group(function () {
+    Route::post('/lots', 'ApiController@add');
+    Route::post('/trade', 'ApiController@buy');
+    Route::get('/lots', 'ApiController@list');
+    Route::get('/lots/{id}', 'ApiController@show')->name('show');
+});

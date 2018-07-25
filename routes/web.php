@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/market/lots/add', 'WebController@add')->name('add');
+
+Route::post('/market/lots', 'WebController@store')->name('store');
